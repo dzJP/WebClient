@@ -16,63 +16,31 @@ public class Runner implements CommandLineRunner {
 
         Mono<String> m = client
                 .get()
-                .uri("rest/product/name/tv")
+                .uri("rest/products/showallproducts")
                 .retrieve()
                 .bodyToMono(String.class);
         String i = m.block();
         System.out.println("Svar: " + i);
+
+        Mono<String> m2 = client
+                .post()
+                .uri("rest/create/product/testproduct/2500/FOOD")
+                .bodyValue(new MyProduct("testproduct",2500.0))
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        System.out.println("Svar: " + m2.block());
     }
-
-//        Mono<Integer> m = client
-//                        .get()
-//                        .uri("http://localhost:8080/rs/add/78/89")
-//                        .retrieve()
-//                        .bodyToMono(Integer.class);
-//
-//        int i = m.block();
-//        System.out.println("Svar: " + i);
-//
-//        Mono<Integer> m2 = client
-//                .post()
-//                .uri("http://localhost:8080/rs/addpair")
-//                .bodyValue(new MittEgnaPar(56,34))
-//                .accept(MediaType.APPLICATION_JSON)
-//                .retrieve()
-//                .bodyToMono(Integer.class);
-//        System.out.println("Svar: " + m2.block());
-//    }
-//}
-//
-//class MittEgnaPar {
-//    int first;
-//    int second;
-//
-//    public MittEgnaPar(int first, int second) {
-//        this.first = first;
-//        this.second = second;
-//    }
-//
-//    public int getFirst() {
-//        return first;
-//    }
-//
-//    public void setFirst(int first) {
-//        this.first = first;
-//    }
-//
-//    public int getSecond() {
-//        return second;
-//    }
-//
-//    public void setSecond(int second) {
-//        this.second = second;
-//    }
 }
-class Product {
-    String name;
 
-    public Product(String name) {
+class MyProduct {
+    String name;
+    Double price;
+
+    public MyProduct(String name, Double price) {
         this.name = name;
+        this.price = price;
     }
 
     public String getName() {
@@ -81,5 +49,13 @@ class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
